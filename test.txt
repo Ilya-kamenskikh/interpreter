@@ -1,0 +1,97 @@
+const signed blank <- -2;
+matrix cell world(6u,6u);
+world(0u,0u) <- (top,nright,ndown,left);
+world(0u,1u) <- (top,right,ndown,nleft);
+world(0u,2u) <- (top,nright,ndown,left);
+world(0u,3u) <- (top,right,down,nleft);
+world(0u,4u) <- (top,nright,ndown,left);
+world(0u,5u) <- (top,right,ndown,nleft);
+world(1u,0u) <- (ntop,right,down,left);
+world(1u,1u) <- (ntop,nright,down,left);
+world(1u,2u) <- (ntop,right,ndown,nleft);
+world(1u,3u) <- (top,nright,down,left);
+world(1u,4u) <- (ntop,right,down,nleft);
+world(1u,5u) <- (ntop,right,ndown,nleft);
+world(2u,0u) <- (top,nright,ndown,left);
+world(2u,1u) <- (top,nright,down,nleft);
+world(2u,2u) <- (ntop,right,ndown,nleft);
+world(2u,3u) <- (top,nright,ndown,left);
+world(2u,4u) <- (top,nright,down,nleft);
+world(2u,5u) <- (ntop,nright,down,nleft);
+world(3u,0u) <- (ntop,nright,ndown,left);
+world(3u,1u) <- (top,right,down,nleft);
+world(3u,2u) <- (ntop,nright,ndown,left);
+world(3u,3u) <- (ntop,nright,down,nleft);
+world(3u,4u) <- (top,nright,down,nleft);
+world(3u,5u) <- (top,right,down,nleft);
+world(4u,0u) <- (ntop,right,ndown,left);
+world(4u,1u) <- (top,nright,ndown,left);
+world(4u,2u) <- (ntop,nright,down,nleft);
+world(4u,3u) <- (top,right,down,nleft);
+world(4u,4u) <- (top,nright,ndown,left);
+world(4u,5u) <- (top,right,ndown,nleft);
+world(5u,0u) <- (ntop,right,down,left);
+world(5u,1u) <- (ntop,nright,down,left);
+world(5u,2u) <- (top,nright,down,nleft);
+world(5u,3u) <- (top,nright,down,nleft);
+world(5u,4u) <- (ntop,right,down,nleft);
+world(5u,5u) <- (ntop,right,down,left);
+
+func lee(unsigned ax unsigned ay unsigned bx unsigned by) (
+	matrix signed grid(6u,6u);
+	unsigned l<-0u;
+	unsigned w<-0u;
+	testonce(l<6u) (w<-0u;testonce(w<6u)(grid(l,w)<-blank;w<-w+1u;);l<-l+1u;);
+	grid(ax,ay)<-0;
+	unsigned x<-0u;
+	unsigned y<-0u;
+	unsigned d<-0u;
+	testonce (grid(bx,by)=blank) (
+		testonce(y<6u) (
+			testonce(x<6u)(
+				testrep(grid(y,x) = d) (
+					testrep(x>0u) (
+						testrep(world(y,x)[3u]=0u)(
+							testrep(grid(y,x - 1)<0) (
+								grid(y,x - 1)<-d+1;
+							);
+						);
+					);
+					testrep(x<5u) (
+						testrep(world(y,x)[1u] =0u)(
+							testrep(grid(y,x + 1)<0) (
+								grid(y,x+1)<-d+1;
+							);
+						);
+					);
+					testrep(y<5u) (
+						testrep(world(y,x)[2u] =0u)(
+							testrep(grid(y+1,x)<0) (
+								grid(y+1,x)<-d+1;
+							);
+						);
+					);
+					testrep(y>0u) (
+						testrep(world(y,x)[0u]=0u)(
+							testrep(grid(y - 1,x)<0) (
+								grid(y - 1,x)<-d+1;
+							);
+						);
+					);
+				);
+				x<-x+1u;
+			);
+			y<-y+1u;
+			x<-0u;
+		);
+		d<-d+1u;
+		x<-0u;
+		y<-0u;
+	);
+	grid(ax,ay)<-0;
+)
+start(
+	call lee(5u 5u 2u 5u);
+	mapping world(6u,6u);
+	put lee(2u,5u);
+)
